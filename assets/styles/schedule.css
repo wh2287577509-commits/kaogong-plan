@@ -1,0 +1,526 @@
+.tag,
+.mini-tag {
+  width: fit-content;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tag {
+  padding: 5px 9px;
+}
+
+.mini-tag {
+  padding: 3px 7px;
+  font-style: normal;
+}
+
+.tag-neutral,
+.tag-work,
+.mini-neutral,
+.mini-work {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.tag-rest,
+.mini-rest {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.tag-holiday,
+.mini-holiday {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.tag-company,
+.mini-company {
+  background: var(--yellow-soft);
+  color: var(--yellow);
+}
+
+.week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.day-card {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  min-height: 112px;
+  padding: 13px;
+  overflow: hidden;
+  color: var(--ink);
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.day-card span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.day-card strong {
+  font-size: 22px;
+}
+
+.day-card i {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin-top: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green) var(--progress), var(--surface-muted) var(--progress));
+}
+
+.day-card.is-selected {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(47, 111, 78, 0.13);
+}
+
+.completion {
+  min-width: 116px;
+  text-align: right;
+}
+
+.completion strong {
+  display: block;
+  color: var(--green);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.completion span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.timeline {
+  display: grid;
+  gap: 10px;
+}
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 126px minmax(0, 1fr) 108px;
+  align-items: center;
+  gap: 14px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+}
+
+.timeline-row time {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.timeline-row strong,
+.timeline-row span {
+  display: block;
+}
+
+.timeline-row span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.status-button,
+.rest-toggle {
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.status-empty {
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+
+.status-done,
+.status-onTime {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.status-partial,
+.status-late {
+  background: var(--yellow-soft);
+  color: var(--yellow);
+}
+
+.status-missed {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.rest-goal {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) 150px;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.rest-goal div {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+}
+
+.rest-goal span,
+.feedback span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.rest-goal strong {
+  font-size: 24px;
+}
+
+.rest-toggle {
+  align-self: stretch;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+
+.rest-toggle.is-active {
+  background: var(--yellow-soft);
+  color: var(--yellow);
+}
+
+.rest-segments {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.rest-segments.is-muted {
+  opacity: 0.45;
+}
+
+.minute-field {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+  font-weight: 700;
+}
+
+.minute-field input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fffefa;
+}
+
+.sleep-feedback {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+}
+
+.sleep-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sleep-fields label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sleep-fields input,
+.sleep-fields select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.feedback {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--green-soft);
+}
+
+.feedback p {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.stats-panel {
+  padding: 22px;
+}
+
+.stats-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.month-picker select {
+  min-height: 44px;
+  padding: 0 38px 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.scope-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.scope-tabs button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.scope-tabs button.is-active {
+  background: var(--surface);
+  color: var(--green);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.scope-tabs button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.month-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.month-overview div {
+  min-height: 94px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffefa;
+}
+
+.month-overview span,
+.month-day i {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.month-overview strong {
+  display: block;
+  margin-top: 12px;
+  color: var(--green);
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.month-overview small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.month-section {
+  margin-top: 8px;
+}
+
+.month-weekdays,
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.month-weekdays {
+  margin-bottom: 8px;
+}
+
+.month-weekdays span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.month-grid::before {
+  content: "";
+  grid-column: span var(--month-offset);
+}
+
+.month-grid[style*="--month-offset:0"]::before {
+  display: none;
+}
+
+.month-day {
+  display: grid;
+  align-content: space-between;
+  gap: 8px;
+  min-height: 104px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  text-align: left;
+  background: var(--surface);
+}
+
+.month-day span {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.heat-strong {
+  background: var(--green-soft);
+}
+
+.heat-medium {
+  background: #edf4df;
+}
+
+.heat-low {
+  background: var(--red-soft);
+}
+
+.heat-rested {
+  background: var(--yellow-soft);
+}
+
+.heat-empty {
+  background: #fffefa;
+  opacity: 0.72;
+}
+
+.month-review {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: 8px;
+  background: var(--green-soft);
+}
+
+.month-review ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .week-strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+}
+
+@media (max-width: 640px) {
+  .week-strip,
+  .rest-goal,
+  .rest-segments,
+  .sleep-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-row {
+    grid-template-columns: 1fr;
+  }
+
+  .status-button {
+    width: 100%;
+  }
+
+  .stats-panel {
+    padding: 16px;
+  }
+
+  .scope-tabs {
+    width: 100%;
+  }
+
+  .stats-controls,
+  .month-picker,
+  .month-picker select {
+    width: 100%;
+  }
+
+  .scope-tabs button {
+    flex: 1;
+  }
+
+  .month-overview,
+  .month-review {
+    grid-template-columns: 1fr;
+  }
+
+  .month-weekdays,
+  .month-grid {
+    gap: 5px;
+  }
+
+  .month-day {
+    min-height: 76px;
+    padding: 7px;
+  }
+
+  .month-day .mini-tag {
+    display: none;
+  }
+}
