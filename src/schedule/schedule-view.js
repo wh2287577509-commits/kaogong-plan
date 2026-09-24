@@ -22,6 +22,17 @@
   }
 
   function buildFeedback(template, completion, record) {
+    if (template.id === "lateWorkday") {
+      if (completion.percent >= 75) return "晚归日能守住最低维护就很好，别再给自己加码。";
+      return "晚归日先保睡眠和记录，今天不需要用正常日标准要求自己。";
+    }
+    if (template.id === "tiredWorkday") {
+      if (completion.percent >= 75) return "疲惫日能收住节奏就是合格，恢复本身也是计划的一部分。";
+      return "今天重点不是多学，而是如实记录、早点睡，把明天留出来。";
+    }
+    if (template.id === "recovery") {
+      return "主动休整不是失败，记录原因后就让身体真正缓下来。";
+    }
     if (template.id === "restday") {
       if (record.restMode === "rest") return "今天是主动休整，不计入失败；记得让休息真的恢复精力。";
       if ((completion.minutes || 0) >= template.excellentMinutes) return "今天超过 4 小时，节奏很扎实，晚上可以早点收住。";
@@ -34,7 +45,31 @@
     return "今天先别急着否定自己，记录下来，明天优先守住第一段。";
   }
 
-  function renderWorkday(template, record) {
+  function renderDayModeSelector(state) {
+    const { dayMode, dayModes } = state;
+    return `
+      <section class="mode-panel" aria-label="今日状态">
+        <div>
+          <p class="eyebrow">每日只需要看这里</p>
+          <h2>今日状态</h2>
+        </div>
+        <div class="mode-chips">
+          ${dayModes
+            .map((mode) => {
+              return `
+                <button class="mode-chip ${mode.id === dayMode ? "is-active" : ""}" data-day-mode="${mode.id}">
+                  <strong>${mode.label}</strong>
+                  <span>${mode.hint}</span>
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderTimeline(template, record) {
     return `
       <div class="timeline">
         ${template.items
@@ -136,6 +171,8 @@
   function renderSchedule(state) {
     const {
       completion,
+      dayMode = "normal",
+      dayModes = global.ExamPlan?.scheduleData?.dayModes || [],
       dateKey,
       record,
       selectedDate,
@@ -163,6 +200,8 @@
           .join("")}
       </section>
 
+      ${renderDayModeSelector({ dayMode, dayModes })}
+
       <main class="layout">
         <section class="panel schedule-panel">
           <div class="section-heading">
@@ -175,7 +214,7 @@
               <span>${completionLabel(completion, template)}</span>
             </div>
           </div>
-          ${template.id === "workday" ? renderWorkday(template, record) : renderRestday(template, record, completion)}
+          ${template.id === "restday" ? renderRestday(template, record, completion) : renderTimeline(template, record)}
         </section>
 
         <aside class="panel summary-panel">

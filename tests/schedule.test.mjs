@@ -112,27 +112,45 @@ test("uses workday and rest-day templates based on company calendar day type", (
   assert.equal(scheduleData.getTemplateForDayType(restType).id, "restday");
 });
 
-test("uses a sustainable workday routine by default", () => {
+test("supports lightweight day modes that switch the daily plan", () => {
+  const workdayType = calendar.getDayType(
+    new Date("2026-09-16T12:00:00+08:00"),
+    dateUtils.formatDateKey,
+  );
+  const restType = calendar.getDayType(
+    new Date("2026-09-19T12:00:00+08:00"),
+    dateUtils.formatDateKey,
+  );
+
+  assert.deepEqual(
+    scheduleData.dayModes.map((mode) => mode.id),
+    ["normal", "late", "tired", "restday", "recovery"],
+  );
+  assert.equal(scheduleData.getDefaultDayMode(workdayType), "normal");
+  assert.equal(scheduleData.getDefaultDayMode(restType), "restday");
+  assert.equal(scheduleData.getTemplateForRecord(workdayType, { dayMode: "late" }).id, "lateWorkday");
+  assert.equal(scheduleData.getTemplateForRecord(workdayType, { dayMode: "tired" }).id, "tiredWorkday");
+  assert.equal(scheduleData.getTemplateForRecord(workdayType, { dayMode: "recovery" }).id, "recovery");
+});
+
+test("uses a low-input normal workday plan by default", () => {
   const wake = scheduleData.workdayTemplate.items.find((item) => {
     return item.id === "wake";
   });
-  const morningStudy = scheduleData.workdayTemplate.items.find((item) => {
-    return item.id === "morningStudy";
+  const arriveHome = scheduleData.workdayTemplate.items.find((item) => {
+    return item.id === "arriveHome";
   });
-  const eveningRest = scheduleData.workdayTemplate.items.find((item) => {
-    return item.id === "eveningRest";
-  });
-  const eveningFocus = scheduleData.workdayTemplate.items.find((item) => {
-    return item.id === "eveningFocus";
+  const lightStudy = scheduleData.workdayTemplate.items.find((item) => {
+    return item.id === "lightStudy";
   });
 
-  assert.equal(scheduleData.workdayTemplate.targetText, "早间学习 50 分钟 + 晚间轻任务 30 分钟，保留真实休息");
+  assert.equal(scheduleData.workdayTemplate.targetText, "默认 30 分钟轻学习，晚归或很累时一键降级");
   assert.equal(wake.time, "06:30");
-  assert.equal(morningStudy.time, "06:40-07:30");
-  assert.equal(eveningRest.time, "19:30-20:00");
-  assert.equal(eveningRest.label, "放松/散步/洗澡/不学习");
-  assert.equal(eveningFocus.time, "20:00-20:30");
-  assert.equal(eveningFocus.label, "晚间轻学习或面试准备");
+  assert.equal(wake.label, "起床/准备上班");
+  assert.equal(arriveHome.time, "19:00-19:40");
+  assert.equal(arriveHome.label, "到家、吃饭、缓冲");
+  assert.equal(lightStudy.time, "19:40-20:10");
+  assert.equal(lightStudy.label, "轻学习/面试准备");
 });
 
 test("controller exposes save status for local and cloud sync", () => {
@@ -152,18 +170,17 @@ test("calculates workday completion and rest-day study minutes", () => {
   const workdayResult = scheduleStats.calculateCompletion(scheduleData.workdayTemplate, {
     statuses: {
       wake: "done",
-      morningStudy: "done",
-      dinner: "done",
-      eveningRest: "done",
-      eveningFocus: "partial",
+      arriveHome: "done",
+      lightStudy: "done",
+      freeBuffer: "done",
       windDown: "done",
       sleep: "late",
     },
   });
 
-  assert.equal(workdayResult.completedUnits, 6);
-  assert.equal(workdayResult.totalUnits, 7);
-  assert.equal(workdayResult.percent, 86);
+  assert.equal(workdayResult.completedUnits, 5.5);
+  assert.equal(workdayResult.totalUnits, 6);
+  assert.equal(workdayResult.percent, 92);
 
   const restRecord = { restSegments: { morning: 100, afternoon: 85 } };
   const restResult = scheduleStats.calculateCompletion(scheduleData.restdayTemplate, restRecord);
@@ -177,10 +194,9 @@ test("calculates a month overview from daily schedule records", () => {
     "2026-09-01": {
       statuses: {
         wake: "done",
-        morningStudy: "done",
-        dinner: "done",
-        eveningRest: "done",
-        eveningFocus: "done",
+        arriveHome: "done",
+        lightStudy: "done",
+        freeBuffer: "done",
         windDown: "done",
         sleep: "onTime",
       },
@@ -189,10 +205,9 @@ test("calculates a month overview from daily schedule records", () => {
     "2026-09-02": {
       statuses: {
         wake: "missed",
-        morningStudy: "partial",
-        dinner: "done",
-        eveningRest: "done",
-        eveningFocus: "missed",
+        arriveHome: "done",
+        lightStudy: "partial",
+        freeBuffer: "done",
         windDown: "done",
         sleep: "late",
       },
@@ -219,8 +234,8 @@ test("calculates a month overview from daily schedule records", () => {
   assert.equal(overview.sleepFeedbackDays, 3);
   assert.equal(overview.sleepScoreTotal, 0);
   assert.equal(overview.sleepScoreAverage, 0);
-  assert.equal(overview.averageWorkdayPercent, 79);
-  assert.equal(overview.weakestItem.label, "起床");
+  assert.equal(overview.averageWorkdayPercent, 84);
+  assert.equal(overview.weakestItem.label, "起床/准备上班");
   assert.equal(overview.days.length, 30);
   assert.equal(overview.days[0].key, "2026-09-01");
   assert.equal(overview.days[4].completion.percent, 100);
@@ -234,10 +249,9 @@ test("renders first-version month statistics with date drill-down controls", () 
       "2026-09-01": {
         statuses: {
           wake: "done",
-          morningStudy: "done",
-          dinner: "done",
-          eveningRest: "done",
-          eveningFocus: "done",
+          arriveHome: "done",
+          lightStudy: "done",
+          freeBuffer: "done",
           windDown: "done",
           sleep: "onTime",
         },
@@ -303,6 +317,35 @@ test("daily schedule includes optional sleep feedback fields", () => {
   assert.match(controller, /sleepFeedback/);
   assert.match(controller, /data-sleep-wake-time/);
   assert.match(controller, /data-sleep-feeling/);
+});
+
+test("daily schedule renders a compact day mode selector", () => {
+  const html = scheduleView.renderSchedule({
+    completion: { completedUnits: 0, totalUnits: 5, percent: 0 },
+    dateKey: "2026-09-16",
+    getDayContext: () => ({
+      completion: { percent: 0 },
+      key: "2026-09-16",
+      type: { label: "工作日", tone: "neutral" },
+    }),
+    record: { dayMode: "late", statuses: {} },
+    selectedDate: new Date("2026-09-16T12:00:00+08:00"),
+    template: scheduleData.lateWorkdayTemplate,
+    type: { label: "工作日" },
+    weekDays: [new Date("2026-09-16T12:00:00+08:00")],
+  });
+  const controller = readFileSync(
+    new URL("../src/schedule/schedule-controller.js", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(html, /今日状态/);
+  assert.match(html, /data-day-mode="normal"/);
+  assert.match(html, /data-day-mode="late"/);
+  assert.match(html, /晚归/);
+  assert.match(html, /最低维护/);
+  assert.match(html, /mode-chip/);
+  assert.match(controller, /data-day-mode/);
 });
 
 test("actual wake time only appears when planned wake-up is not completed", () => {

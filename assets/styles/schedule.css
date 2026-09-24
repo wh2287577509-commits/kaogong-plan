@@ -85,6 +85,68 @@
   box-shadow: 0 0 0 3px rgba(47, 111, 78, 0.13);
 }
 
+.mode-panel {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(220, 235, 221, 0.72), rgba(255, 254, 250, 0.9)),
+    var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.mode-panel h2 {
+  font-size: 22px;
+}
+
+.mode-chips {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mode-chip {
+  min-height: 72px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 254, 250, 0.82);
+  color: var(--ink);
+  text-align: left;
+}
+
+.mode-chip strong,
+.mode-chip span {
+  display: block;
+}
+
+.mode-chip strong {
+  font-size: 16px;
+}
+
+.mode-chip span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.mode-chip.is-active {
+  border-color: var(--green);
+  background: var(--green-soft);
+  color: var(--green);
+  box-shadow: 0 0 0 3px rgba(47, 111, 78, 0.12);
+}
+
+.mode-chip.is-active span {
+  color: var(--green);
+}
+
 .completion {
   min-width: 116px;
   text-align: right;
@@ -469,6 +531,13 @@ textarea {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .mode-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-chips {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
@@ -485,6 +554,18 @@ textarea {
 
   .status-button {
     width: 100%;
+  }
+
+  .mode-panel {
+    padding: 14px;
+  }
+
+  .mode-chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mode-chip {
+    min-height: 64px;
   }
 
   .stats-panel {

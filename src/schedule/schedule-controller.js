@@ -46,7 +46,7 @@
       const key = app.date.formatDateKey(date);
       const record = app.storage.getRecord(records, key);
       const type = app.calendar.getDayType(date, app.date.formatDateKey);
-      const template = app.scheduleData.getTemplateForDayType(type);
+      const template = app.scheduleData.getTemplateForRecord(type, record);
       const completion = app.scheduleStats.calculateCompletion(template, record);
       return { completion, key, record, template, type };
     };
@@ -101,6 +101,8 @@
           ${activeSection === "schedule"
             ? app.scheduleView.renderSchedule({
                 ...context,
+                dayMode: context.record.dayMode || app.scheduleData.getDefaultDayMode(context.type),
+                dayModes: app.scheduleData.dayModes,
                 dateKey,
                 getDayContext,
                 selectedDate,
@@ -396,6 +398,17 @@
           const nextRecord = {
             ...context.record,
             statuses: { ...(context.record.statuses || {}), [itemId]: next },
+          };
+          app.storage.setRecord(records, dateKey, nextRecord);
+          await syncCurrentRecord(dateKey, nextRecord);
+        });
+      });
+
+      rootElement.querySelectorAll("[data-day-mode]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const nextRecord = {
+            ...context.record,
+            dayMode: button.dataset.dayMode,
           };
           app.storage.setRecord(records, dateKey, nextRecord);
           await syncCurrentRecord(dateKey, nextRecord);
