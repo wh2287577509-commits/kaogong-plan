@@ -70,8 +70,10 @@
     const days = eachDayOfMonth(selectedDate).map((date) => {
       const key = dateUtils.formatDateKey(date);
       const type = calendar.getDayType(date, dateUtils.formatDateKey);
-      const template = scheduleData.getTemplateForDayType(type);
       const record = records[key] || {};
+      const template = scheduleData.getTemplateForRecord
+        ? scheduleData.getTemplateForRecord(type, record)
+        : scheduleData.getTemplateForDayType(type);
       const hasRecord = Boolean(records[key]);
       const completion = calculateCompletion(template, record);
 
